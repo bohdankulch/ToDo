@@ -1,0 +1,172 @@
+﻿@model IEnumerable<ToDoTask.Models.ToDo>
+<h2>Custom list</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by title task: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p>
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.DescriptionSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Importance", "Index", new { sortOrder = ViewBag.ImportanceSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Due Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Is Done", "Index", new { sortOrder = ViewBag.DoneSortParm })
+        </th>
+        <th></th>
+    </tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" style="color:red">
+                no match any task
+            </td>
+        </tr>
+    }
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (!item.IsDone)
+                {
+                    @Html.DisplayFor(modelItem => item.Title)
+                }
+                else
+                {
+                    <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.Title)</div>
+                }
+            </td>
+            <td>
+                @if (!item.IsDone)
+                {
+                    @Html.DisplayFor(modelItem => item.Description)
+                }
+                else
+                {
+                    <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.Description)</div>
+                }
+
+            </td>
+            <td>
+                @if (!item.IsDone)
+                {
+                    @Html.DisplayFor(modelItem => item.Importance)
+                }
+                else
+                {
+                    <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.Importance)</div>
+                }
+
+            </td>
+            <td>
+                @if (!item.IsDone)
+                {
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                }
+                else
+                {
+                    <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.DueDate)</div>
+                }
+
+            </td>
+            <td>
+                @Html.CheckBoxFor(modelItem => item.IsDone, new { id = item.Id, @class = "ActiveCheck" })
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<h2>Smart list</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            All tasks
+        </th>
+        <th>
+            Planned tasks
+        </th>
+        <th>
+            Important tasks
+        </th>
+        <th>
+            Today’s tasks
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @if (!item.IsDone)
+        {
+            @Html.DisplayFor(modelItem => item.Title)
+        }
+        else
+        {
+            <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.Title)</div>
+        }
+    </td>
+    <td>
+        @if (!item.IsDone)
+        {
+            @Html.DisplayFor(modelItem => item.DueDate)
+        }
+        else
+        {
+            <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.DueDate)</div>
+        }
+
+    </td>
+    <td>
+        @if (!item.IsDone)
+        {
+            @Html.DisplayFor(modelItem => item.Importance)
+        }
+        else
+        {
+            <div class="CompletedToDo">@Html.DisplayFor(modelItem => item.Importance)</div>
+        }
+
+    </td>
+    <td>
+        @if (item.DueDate == DateTime.Today)
+        {
+            @Html.DisplayFor(modelItem => item.Title)
+        }
+    </td>
+</tr>
+    }
+
+</table>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Custom_Scripts/AddCheckBoxListener.js"></script>
